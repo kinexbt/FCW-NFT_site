@@ -4,6 +4,7 @@ import { fetchCandyMachine, fetchCandyGuard, mintV1, mplCandyMachine as mplCoreC
 import { setComputeUnitLimit } from '@metaplex-foundation/mpl-toolbox';
 import secret from './my-wallet';
 import { walletAdapterIdentity } from '@metaplex-foundation/umi-signer-wallet-adapters';
+import { CANDY_MACHINE_ID, CORE_COLLECTION_ID } from '../config';
 
 // Setup Umi client connected to cluster
 // const umi = createUmi('https://api.devnet.solana.com').use(mplCoreCandyMachine());
@@ -13,9 +14,10 @@ import { walletAdapterIdentity } from '@metaplex-foundation/umi-signer-wallet-ad
 
 // umi.use(keypairIdentity(keypair))
 
-const candyMachineId = publicKey('qi4TmzYjucP6sdw4hT4yphLWkFH2B6qWHa7wcqvxSxu');
-const coreCollectionId = publicKey('AbkEFsQcTwKenoRg7chT6NBhCUqAuSpRub3XjEvw94yL');
-
+const candyMachineId = publicKey('FTq6eb3eVsndPrumVbdysDbxJ5Wm4KPW7S7HiwidbhAo');
+const coreCollectionId = publicKey('HrQ1ghn4McQJTkvUfsQNrusLGGMGi83Vi8rncxJr2ZTq');
+console.log(candyMachineId, "candyMachineId")
+console.log(coreCollectionId, "coreCollectionId")
 // let getMintGroupLabel = "1m";
 
 let mySolPayment = none<{ lamports: SolAmount; destination: ReturnType<typeof publicKey> }>();
@@ -28,18 +30,18 @@ export async function mintNFT(getMintGroupLabel: any, wallet: any): Promise<stri
     return "null";
   }
   // console.log(wallet.adapter.publicKey, "wallet.publicKey")
-  const umi = await createUmi('https://api.mainnet-beta.solana.com').use(walletAdapterIdentity(wallet.adapter)).use(mplCoreCandyMachine());
+  const umi = await createUmi('https://mainnet.helius-rpc.com/?api-key=ef50d5d8-cc07-48a6-8ed2-5c1e312a56ee').use(walletAdapterIdentity(wallet.adapter)).use(mplCoreCandyMachine());
 // console.log(umi, "umi") 
   const asset = generateSigner(umi);
 
   try {
-      // const candyMachine = await fetchCandyMachine(umi, candyMachineId);
+      const candyMachine = await fetchCandyMachine(umi, candyMachineId);
       // console.log(candyMachine)
       // Step 2: Extract the candyGuard address
       // const candyGuardAddress = await candyMachine.candyGuard;
     // 💡 Fetch Candy Guard Config
-    // const candyGuard = await fetchCandyGuard(umi, candyMachine.mintAuthority);
-    // console.log("🛡️ Candy Guard configuration:", candyGuard);
+    const candyGuard = await fetchCandyGuard(umi, candyMachine.mintAuthority);
+    console.log("🛡️ Candy Guard configuration:", candyGuard);
 
     if (getMintGroupLabel === "base") {
       mySolPayment = some({
@@ -83,9 +85,26 @@ export async function mintNFT(getMintGroupLabel: any, wallet: any): Promise<stri
           },
         })
       )
-      .sendAndConfirm(umi);
+      .buildAndSign(umi);
+      // .sendAndConfirm(umi);
+      
+    const signature = await umi.rpc.sendTransaction(response, {
+      skipPreflight: true,
+      commitment: "confirmed",
+    });
+    console.log("signature: ", signature);
 
-    console.log("✅ Mint successful:", response.signature);
+    const confirmRes = await umi.rpc.confirmTransaction(signature, {
+      strategy: {
+        type: 'blockhash',
+        ...(await umi.rpc.getLatestBlockhash()),
+      },
+    });
+    console.log("confirmRes: ", confirmRes);
+
+    
+
+    // console.log("✅ Mint successful:", response.signature);
     return "ok";
   } catch (error: any) {
     console.log(error, "error");

@@ -15,6 +15,7 @@ import {
   PUBLICMINTPRICE,
   TOKENCONTRACT_ADDR,
   WHITELISTMINTPRICE,
+  CANDY_MACHINE_ID,
 } from "../config";
 import { useWeb3React } from "@web3-react/core";
 import { useWhitelist } from "../contexts/WhitelistContext";
@@ -45,9 +46,15 @@ export default function Mint() {
     fade: true,
   };
 
-  const umi = createUmi(clusterApiUrl('mainnet-beta')).use(mplCoreCandyMachine());
+  const umi = createUmi('https://mainnet.helius-rpc.com/?api-key=ef50d5d8-cc07-48a6-8ed2-5c1e312a56ee').use(mplCoreCandyMachine());
+  // const umi = createUmi('https://api.devnet.solana.com').use(mplCoreCandyMachine());
+  // const umi = createUmi('https://devnet.helius-rpc.com/?api-key=ef50d5d8-cc07-48a6-8ed2-5c1e312a56ee').use(mplCoreCandyMachine());
+  
+  
+  // const candyMachineID = umiPublicKey('8DWfWUwuRuiNvCB9reHZeDwN1iaQnVXJYdy5F8VnKojj');
   // const candyMachineID = umiPublicKey('HpMvbfNFk4uf9L2Aec9Y7vyEDMSTve7aQ3qNMwPbtThu');
-  const candyMachineID = umiPublicKey('qi4TmzYjucP6sdw4hT4yphLWkFH2B6qWHa7wcqvxSxu');
+  const candyMachineID = umiPublicKey('FTq6eb3eVsndPrumVbdysDbxJ5Wm4KPW7S7HiwidbhAo');
+console.log(candyMachineID, "candyMachineID")
 
 
   const { publicKey, connected, wallet } = useWallet();
@@ -100,7 +107,11 @@ export default function Mint() {
       console.log(WL_state);
       
       let mintResult;
-      if (balance >= 500000) {
+      // mintResult = await mintNFT("wl500k", wallet);
+      // console.log("👍👍👍", mintResult);
+      // return;
+      // const dev = 1;
+       if (balance >= 500000) {
         if (WL_state == 1) {  
           infoAlert("Transaction will cost 0 SOL (Free mint)");          // cost is free only once to mint - 500K WL
           mintResult = await mintNFT("wl500K", wallet);
@@ -118,7 +129,7 @@ export default function Mint() {
             errorAlert("Mint failed. Please try again.");
           }
         }
-        else if (balance >= 1000000) { // cost is 0.25 SOL to mint - 1M
+        else if (balance >= 1000000) {                                    // cost is 0.25 SOL to mint - 1M
           infoAlert("Transaction will cost 0.25 SOL");
           mintResult = await mintNFT("1m", wallet);
           if (mintResult == "ok") {
@@ -133,7 +144,7 @@ export default function Mint() {
             errorAlert("Mint failed. Please try again.");
           }
         }
-        else if (WL_state != 0) {     // cost is 0.5 SOL to mint - wl
+        else if (WL_state != 0) {                                          // cost is 0.5 SOL to mint - wl
           infoAlert("Transaction will cost 0.5 SOL");
           mintResult = await mintNFT("wl", wallet);
           if (mintResult == "ok") {
@@ -150,7 +161,7 @@ export default function Mint() {
           }
         }
       } else if (balance >= 100000) { 
-        if (WL_state != 0) {      // cost is 0.5 SOL to mint - wl
+        if (WL_state != 0) {                                                 // cost is 0.5 SOL to mint - wl
           infoAlert("Transaction will cost 0.5 SOL");
           mintResult = await mintNFT("wl", wallet);
           if (mintResult == "ok") {
@@ -165,7 +176,7 @@ export default function Mint() {
           } else {
             errorAlert("Mint failed. Please try again.");
           }
-        } else {                  // cost is 0.65 SOL to mint - 100k
+        } else {                                                              // cost is 0.65 SOL to mint - 100k
           infoAlert("Transaction will cost 0.65 SOL");
           mintResult = await mintNFT("100k", wallet);
           if (mintResult == "ok") {
@@ -182,7 +193,7 @@ export default function Mint() {
           }
         }
       } else {
-        if (WL_state != 0) {      // cost is 0.5 SOL to mint - wl
+        if (WL_state != 0) {                                                  // cost is 0.5 SOL to mint - wl
           infoAlert("Transaction will cost 0.5 SOL");
           mintResult = await mintNFT("wl", wallet);
           if (mintResult == "ok") {
@@ -197,7 +208,7 @@ export default function Mint() {
           } else {
             errorAlert("Mint failed. Please try again.");
           }
-        } else {                  // cost is 1 SOL to mint - base
+        } else {                                                              // cost is 1 SOL to mint - base
           infoAlert("Transaction will cost 1 SOL");
           mintResult = await mintNFT("base", wallet);
           if (mintResult == "ok") {

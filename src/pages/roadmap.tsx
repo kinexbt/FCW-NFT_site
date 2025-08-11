@@ -94,13 +94,13 @@ export default function RoadMap() {
                   </h1>
                 </div>
                 <div className="flex items-center justify-center">
-                  <BlurredContent placeholder="FAT CAT" blurIntensity="heavy">
+                  {/* <BlurredContent placeholder="FAT CAT" blurIntensity="heavy"> */}
                     <img
                       src={`/img/nft/v4-slider-img2.png`}
                       className="w-[300px]"
                       alt="nftCollectionSlider"
                     />
-                  </BlurredContent>
+                  {/* </BlurredContent> */}
                 </div>
                 <div className="flex flex-col items-start justify-start h-full gap-5 p-10">
                   <h3 className="text-white text-[30px] font-bold">

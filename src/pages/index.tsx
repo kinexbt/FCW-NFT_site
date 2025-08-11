@@ -137,7 +137,7 @@ const Home: NextPage = () => {
           </Bounce>
           <div className="flex items-center justify-center w-full lg:justify-end">
             <div className="xl:w-[500px] lg:w-[400px] w-[350px] md:w-[500px] p-2">
-              <BlurredContent placeholder="999 FAT CATS" blurIntensity="heavy">
+              {/* <BlurredContent placeholder="999 FAT CATS" blurIntensity="heavy"> */}
                 <div className="p-2 border-[1px] border-yellow-500 rounded-xl bg-white bg-opacity-10 backdrop-blur-sm">
                   <Slider
                     {...settings}
@@ -153,7 +153,7 @@ const Home: NextPage = () => {
                     ))}
                   </Slider>
                 </div>
-              </BlurredContent>
+              {/* </BlurredContent> */}
             </div>
           </div>
         </div>
@@ -163,11 +163,11 @@ const Home: NextPage = () => {
       <RoadMap />
       <Team />
       {/* Floating Book Whitelist Button - only show if not whitelisted and not booked */}
-      {
+      {/* {
         !isWhitelisted && !hasBooked && (
           <BookWhitelistButton onClick={handleBookClick} />
         )
-      }
+      } */}
       {/* Book Whitelist Modal */}
       <BookWhitelistModal
         open={modalOpen}

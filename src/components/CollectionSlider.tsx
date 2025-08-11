@@ -87,7 +87,7 @@ const CollectionSlider = () => {
       <Slider {...settings} className="my-10 slider">
         {nftImages.map((image, index) => (
           <div key={index} className="px-3">
-            <BlurredContent placeholder="FAT CAT" blurIntensity="heavy">
+            {/* <BlurredContent placeholder="FAT CAT" blurIntensity="heavy"> */}
               <div className="w-full p-2 border-2 border-[#FFD700] bg-white bg-opacity-10 backdrop-blur-md rounded-md">
                 <img
                   src={`/img/nft/${image}`}
@@ -95,7 +95,7 @@ const CollectionSlider = () => {
                   alt="nftCollectionSlider"
                 />
               </div>
-            </BlurredContent>
+            {/* </BlurredContent> */}
           </div>
         ))}
       </Slider>
