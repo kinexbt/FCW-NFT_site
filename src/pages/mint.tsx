@@ -47,14 +47,14 @@ export default function Mint() {
   };
 
   const umi = createUmi('https://mainnet.helius-rpc.com/?api-key=ef50d5d8-cc07-48a6-8ed2-5c1e312a56ee').use(mplCoreCandyMachine());
-  // const umi = createUmi('https://api.devnet.solana.com').use(mplCoreCandyMachine());
+  // const umi = createUmi('https://api.mainnet-beta.solana.com').use(mplCoreCandyMachine());
   // const umi = createUmi('https://devnet.helius-rpc.com/?api-key=ef50d5d8-cc07-48a6-8ed2-5c1e312a56ee').use(mplCoreCandyMachine());
   
   
   // const candyMachineID = umiPublicKey('8DWfWUwuRuiNvCB9reHZeDwN1iaQnVXJYdy5F8VnKojj');
   // const candyMachineID = umiPublicKey('HpMvbfNFk4uf9L2Aec9Y7vyEDMSTve7aQ3qNMwPbtThu');
-  const candyMachineID = umiPublicKey('FTq6eb3eVsndPrumVbdysDbxJ5Wm4KPW7S7HiwidbhAo');
-console.log(candyMachineID, "candyMachineID")
+  const candyMachineID = umiPublicKey('5zEo8RXVTRv1AXdSEkVBncAyqXwjPmRV3x3DWj4jSC6Z');
+  console.log(candyMachineID, "candyMachineID")
 
 
   const { publicKey, connected, wallet } = useWallet();
@@ -85,6 +85,18 @@ console.log(candyMachineID, "candyMachineID")
     Signer
   );
 
+  const getSolBalance = async (walletAddress: string) => {
+    try {
+      const publicKey = umiPublicKey(walletAddress);
+      const balance = await umi.rpc.getBalance(publicKey);
+      // Convert lamports to SOL (1 SOL = 1,000,000,000 lamports)
+      return Number(balance.basisPoints) / 1_000_000_000;
+    } catch (error) {
+      console.error("Error getting SOL balance:", error);
+      return 0;
+    }
+  };
+
   const handleMintFunc = async () => {
     // Check if wallet is connected
     if (!connected || !publicKey) {
@@ -100,6 +112,10 @@ console.log(candyMachineID, "candyMachineID")
       const mintAddress = "2UWTpLPx5gPbREtRB7vYJFj9ruWrBJrNx7zrugDD3QVL"; // FCW token mint
       console.log("💕💕💕", walletAddress);
       
+      // Get SOL balance
+      const solBalance = await getSolBalance(walletAddress);
+      console.log("SOL balance:", solBalance);
+      
       const balance = await getMainnetTokenBalance(walletAddress, mintAddress);
       // const balance = 2000000;
       console.log("FCW token balance:", balance);
@@ -110,8 +126,7 @@ console.log(candyMachineID, "candyMachineID")
       // mintResult = await mintNFT("wl500k", wallet);
       // console.log("👍👍👍", mintResult);
       // return;
-      // const dev = 1;
-       if (balance >= 500000) {
+      if (balance >= 500000) {
         if (WL_state == 1) {  
           infoAlert("Transaction will cost 0 SOL (Free mint)");          // cost is free only once to mint - 500K WL
           mintResult = await mintNFT("wl500K", wallet);
@@ -129,8 +144,12 @@ console.log(candyMachineID, "candyMachineID")
             errorAlert("Mint failed. Please try again.");
           }
         }
-        else if (balance >= 1000000) {                                    // cost is 0.25 SOL to mint - 1M
-          infoAlert("Transaction will cost 0.25 SOL");
+        else if (balance >= 1000000) {                                    // cost is 0.125 SOL to mint - 1M
+          if (solBalance < 0.125) {
+            errorAlert("Not enough SOL. You need at least 0.125 SOL to mint.");
+            return;
+          }
+          infoAlert("Transaction will cost 0.125 SOL");
           mintResult = await mintNFT("1m", wallet);
           if (mintResult == "ok") {
             successAlert("Mint Successful! 🎉");
@@ -144,9 +163,32 @@ console.log(candyMachineID, "candyMachineID")
             errorAlert("Mint failed. Please try again.");
           }
         }
-        else if (WL_state != 0) {                                          // cost is 0.5 SOL to mint - wl
-          infoAlert("Transaction will cost 0.5 SOL");
+        else if (WL_state != 0) {                                          // cost is 0.25 SOL to mint - wl
+          if (solBalance < 0.25) {
+            errorAlert("Not enough SOL. You need at least 0.25 SOL to mint.");
+            return;
+          }
+          infoAlert("Transaction will cost 0.25 SOL");
           mintResult = await mintNFT("wl", wallet);
+          if (mintResult == "ok") {
+            successAlert("Mint Successful! 🎉");
+            // Start polling for mint data update
+            if (stats) {
+              startPollingForMintUpdate(stats.minted, stats.remaining);
+            }
+          } else if (mintResult == "NotEnoughSOL") {
+            errorAlert("Not enough SOL to pay for mint.");
+
+          } else {
+            errorAlert("Mint failed. Please try again.");
+          }
+        } else {                                                              // cost is 0.325 SOL to mint - 100k
+          if (solBalance < 0.325) {
+            errorAlert("Not enough SOL. You need at least 0.325 SOL to mint.");
+            return;
+          }
+          infoAlert("Transaction will cost 0.325 SOL");
+          mintResult = await mintNFT("100k", wallet);
           if (mintResult == "ok") {
             successAlert("Mint Successful! 🎉");
             // Start polling for mint data update
@@ -161,8 +203,12 @@ console.log(candyMachineID, "candyMachineID")
           }
         }
       } else if (balance >= 100000) { 
-        if (WL_state != 0) {                                                 // cost is 0.5 SOL to mint - wl
-          infoAlert("Transaction will cost 0.5 SOL");
+        if (WL_state != 0) {                                                 // cost is 0.25 SOL to mint - wl
+          if (solBalance < 0.25) {
+            errorAlert("Not enough SOL. You need at least 0.25 SOL to mint.");
+            return;
+          }
+          infoAlert("Transaction will cost 0.25 SOL");
           mintResult = await mintNFT("wl", wallet);
           if (mintResult == "ok") {
             successAlert("Mint Successful! 🎉");
@@ -176,8 +222,12 @@ console.log(candyMachineID, "candyMachineID")
           } else {
             errorAlert("Mint failed. Please try again.");
           }
-        } else {                                                              // cost is 0.65 SOL to mint - 100k
-          infoAlert("Transaction will cost 0.65 SOL");
+        } else {                                                              // cost is 0.325 SOL to mint - 100k
+          if (solBalance < 0.325) {
+            errorAlert("Not enough SOL. You need at least 0.325 SOL to mint.");
+            return;
+          }
+          infoAlert("Transaction will cost 0.325 SOL");
           mintResult = await mintNFT("100k", wallet);
           if (mintResult == "ok") {
             successAlert("Mint Successful! 🎉");
@@ -193,8 +243,12 @@ console.log(candyMachineID, "candyMachineID")
           }
         }
       } else {
-        if (WL_state != 0) {                                                  // cost is 0.5 SOL to mint - wl
-          infoAlert("Transaction will cost 0.5 SOL");
+        if (WL_state != 0) {                                                  // cost is 0.25 SOL to mint - wl
+          if (solBalance < 0.25) {
+            errorAlert("Not enough SOL. You need at least 0.25 SOL to mint.");
+            return;
+          }
+          infoAlert("Transaction will cost 0.25 SOL");
           mintResult = await mintNFT("wl", wallet);
           if (mintResult == "ok") {
             successAlert("Mint Successful! 🎉");
@@ -208,8 +262,12 @@ console.log(candyMachineID, "candyMachineID")
           } else {
             errorAlert("Mint failed. Please try again.");
           }
-        } else {                                                              // cost is 1 SOL to mint - base
-          infoAlert("Transaction will cost 1 SOL");
+        } else {                                                              // cost is 0.5 SOL to mint - base
+          if (solBalance < 0.5) {
+            errorAlert("Not enough SOL. You need at least 0.5 SOL to mint.");
+            return;
+          }
+          infoAlert("Transaction will cost 0.5 SOL");
           mintResult = await mintNFT("base", wallet);
           if (mintResult == "ok") {
             successAlert("Mint Successful! 🎉");
@@ -375,7 +433,7 @@ console.log(candyMachineID, "candyMachineID")
                 <h1 className="text-xl font-normal text-center text-white">
                   The FatCatWens NFTs
                   <br />
-                  FatCatWens Minting Cost = 1 SOL
+                  FatCatWens Minting Cost = 0.5 SOL
                 </h1>
               </div><br/>
               {/* <div className="flex items-center justify-between w-full mt-5">

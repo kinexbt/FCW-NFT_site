@@ -14,8 +14,8 @@ import { CANDY_MACHINE_ID, CORE_COLLECTION_ID } from '../config';
 
 // umi.use(keypairIdentity(keypair))
 
-const candyMachineId = publicKey('FTq6eb3eVsndPrumVbdysDbxJ5Wm4KPW7S7HiwidbhAo');
-const coreCollectionId = publicKey('HrQ1ghn4McQJTkvUfsQNrusLGGMGi83Vi8rncxJr2ZTq');
+const candyMachineId = publicKey('5zEo8RXVTRv1AXdSEkVBncAyqXwjPmRV3x3DWj4jSC6Z');
+const coreCollectionId = publicKey('Ff8hGgdaHn5HCgsuYfKSZLQrDgY4qd7RJbuyAALfFmf6');
 console.log(candyMachineId, "candyMachineId")
 console.log(coreCollectionId, "coreCollectionId")
 // let getMintGroupLabel = "1m";
@@ -45,22 +45,22 @@ export async function mintNFT(getMintGroupLabel: any, wallet: any): Promise<stri
 
     if (getMintGroupLabel === "base") {
       mySolPayment = some({
-        lamports: sol(1),
+        lamports: sol(0.5),
         destination: publicKey("GLrje9c1YXEpWFtzkQKLf2rFa9V9jLppFFHeQnAbz2pE"),
       });
     } else if (getMintGroupLabel === "1m") {
       mySolPayment = some({
-        lamports: sol(0.25),
+        lamports: sol(0.125),
         destination: publicKey("GLrje9c1YXEpWFtzkQKLf2rFa9V9jLppFFHeQnAbz2pE"),
       });
     } else if (getMintGroupLabel === "100k") {
       mySolPayment = some({
-        lamports: sol(0.65),
+        lamports: sol(0.325),
         destination: publicKey("GLrje9c1YXEpWFtzkQKLf2rFa9V9jLppFFHeQnAbz2pE"),
       });
     } else if (getMintGroupLabel === "wl") {
       mySolPayment = some({
-        lamports: sol(0.5),
+        lamports: sol(0.25),
         destination: publicKey("GLrje9c1YXEpWFtzkQKLf2rFa9V9jLppFFHeQnAbz2pE"),
       });
     } else if (getMintGroupLabel === "wl500K") {

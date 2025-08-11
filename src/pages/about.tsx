@@ -52,6 +52,7 @@ export default function About() {
                   <br />
                   <span className="text-yellow-200 font-medium">FCW Holders:</span> 
                   <ul className="list-disc pl-6 mt-1 text-red-400">
+                    <li>Whitelist & 500K+ tokens → Free Mint, Once per wallet</li>
                     <li>100K+ tokens → 35% off</li>
                     <li>1M+ tokens → 75% off</li>
                   </ul>
