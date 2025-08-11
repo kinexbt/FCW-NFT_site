@@ -8,7 +8,7 @@ const Countdown = ({ endDateTime, onCanBreed, totalSupply }) => {
       <>
         {iscompleted || totalSupply >= 1880 ? (
           <div className="mt-5 text-2xl font-extrabold text-red-400 md:text-3xl animate-bounce">
-            WHITLIST: SOLDOUT!
+            WHITELIST: SOLDOUT!
           </div>
         ) : (
           <>
