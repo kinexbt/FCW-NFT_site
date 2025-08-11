@@ -121,11 +121,11 @@ const Home: NextPage = () => {
                 </Link>
                 {/* </BlurredContent> */}
                 {/* <BlurredContent placeholder="August 1st" forceBlur={true}>         */}       {/* MOMO blocked */}
-                <Link href="/claim" passHref>
+                {/* <Link href="/claim" passHref>
                   <button className="w-full px-10 py-4 mt-5 font-bold text-black transition-all duration-300 bg-white rounded-md lg:w-auto hover:bg-gray-400">
                     Claim
                   </button>
-                </Link>
+                </Link> */}
                 {/* </BlurredContent> */}
                 <Link href="https://www.fatcatwen.com" passHref>
                   <button className="w-full px-10 py-4 mt-5 font-bold text-black transition-all duration-300 bg-white rounded-md lg:w-auto hover:bg-gray-400">
