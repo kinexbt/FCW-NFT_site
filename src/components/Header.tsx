@@ -50,30 +50,26 @@ export default function Header() {
               Home
             </p>
           </Link>
-          <a
-            href="#about"
-            className="font-normal text-white transition-all duration-300 cursor-pointer text-md hover:text-yellow-500"
-          >
-            About
-          </a>
-          <a
-            href="#collection"
-            className="font-normal text-white transition-all duration-300 cursor-pointer text-md hover:text-yellow-500"
-          >
-            Collection
-          </a>
-          <a
-            className="font-normal text-white transition-all duration-300 cursor-pointer text-md hover:text-yellow-500"
-            href="#roadmap"
-          >
-            RoadMap
-          </a>
-          <a
-            className="font-normal text-white transition-all duration-300 cursor-pointer text-md hover:text-yellow-500"
-            href="#team"
-          >
-            Team
-          </a>
+          <Link href="/#about" passHref>
+            <p className="font-normal text-white transition-all duration-300 cursor-pointer text-md hover:text-yellow-500">
+              About
+            </p>
+          </Link>
+          <Link href="/#collection" passHref>
+            <p className="font-normal text-white transition-all duration-300 cursor-pointer text-md hover:text-yellow-500">
+              Collection
+            </p>
+          </Link>
+          <Link href="/#roadmap" passHref>
+            <p className="font-normal text-white transition-all duration-300 cursor-pointer text-md hover:text-yellow-500">
+              RoadMap
+            </p>
+          </Link>
+          <Link href="/#team" passHref>
+            <p className="font-normal text-white transition-all duration-300 cursor-pointer text-md hover:text-yellow-500">
+              Team
+            </p>
+          </Link>
         </div>
         <div className="flex items-center">
           {/* Custom Solana Wallet Connect Button with Original UI Style */}
@@ -129,7 +125,7 @@ export default function Header() {
                     Home
                   </li>
                 </Link>
-                <a href="#about">
+                <Link href="/#about" passHref>
                   <li
                     className={`text-lg font-normal ${
                       router.pathname === "/createraffle"
@@ -140,8 +136,8 @@ export default function Header() {
                   >
                     About
                   </li>
-                </a>
-                <a href="#collection">
+                </Link>
+                <Link href="/#collection" passHref>
                   <li
                     className={`text-lg font-normal ${
                       router.pathname === "/createraffle"
@@ -152,7 +148,7 @@ export default function Header() {
                   >
                     Collection
                   </li>
-                </a>
+                </Link>
                 <a href={"/#roadmap"}>
                   <li
                     className={`text-lg font-normal ${
